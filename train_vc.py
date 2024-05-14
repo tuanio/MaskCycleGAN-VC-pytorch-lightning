@@ -25,11 +25,8 @@ SAMPLE_RATE = 16000
 class UnpairDataset(Dataset):
     def __init__(self, wav_path_a, wav_path_b, is_train=True):
         super().__init__()
-        self.wav_list_a = glob.glob(wav_path_a + '/*.wav')
-        self.wav_list_b = glob.glob(wav_path_b + '/*.wav')
-
-        random.shuffle(self.wav_list_a)
-        random.shuffle(self.wav_list_b)
+        list_a = glob.glob(wav_path_a + '/*.wav')
+        list_b = glob.glob(wav_path_b + '/*.wav')
 
         self.max_len = max(len(self.wav_list_a), len(self.wav_list_b))
 
@@ -52,9 +49,9 @@ class UnpairDataset(Dataset):
     
     def read_data(self, path):
         wav, sr = torchaudio.load(path)
-        wav = torchaudio.functional.resample(wav, sr, SAMPLE_RATE)
+        if sr != SAMPLE_RATE:
+            wav = torchaudio.functional.resample(wav, sr, SAMPLE_RATE)
         spec = torch.stft(wav, **self.stft_conf, return_complex=True)
-        # spec = torch.view_as_real(spec)
 
         return torch.stack([spec.real, spec.imag], dim=1)[0]
 
