@@ -25,8 +25,8 @@ SAMPLE_RATE = 16000
 class UnpairDataset(Dataset):
     def __init__(self, wav_path_a, wav_path_b, is_train=True):
         super().__init__()
-        list_a = glob.glob(wav_path_a + '/*.wav')
-        list_b = glob.glob(wav_path_b + '/*.wav')
+        self.wav_list_a = glob.glob(wav_path_a + '/*.wav')
+        self.wav_list_b = glob.glob(wav_path_b + '/*.wav')
 
         self.max_len = max(len(self.wav_list_a), len(self.wav_list_b))
 
