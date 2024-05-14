@@ -42,7 +42,7 @@ class UnpairDataset(Dataset):
 
         self.cut_dim = 128
         self.img_dim = (n_fft // 2 + 1, self.cut_dim)
-        self.mask_width = [0, 64]
+        self.mask_width = [0, 80]
 
     def __len__(self):
         return self.max_len
