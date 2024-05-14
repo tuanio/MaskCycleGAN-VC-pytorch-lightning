@@ -121,13 +121,15 @@ class MaskCycleGAN(pl.LightningModule):
         self.fakeA = fakeA.detach()
         self.fakeB = fakeB.detach()
 
-        # log imgA - fakeB
-        # log imgB - fakeA
-        self.logger.log_image("Mag-realA_fakeB", [self.draw_mag(imgA), self.draw_mag(fakeB),])
-        self.logger.log_image("Mag-realB_fakeA", [self.draw_mag(imgB), self.draw_mag(fakeA),])
 
-        self.logger.log_audio("Audio-realA_fakeB", [self.audio(imgA), self.audio(fakeB),], sample_rate=[16000, 16000])
-        self.logger.log_audio("Audio-realB-fakeA", [self.audio(imgB), self.audio(fakeA),], sample_rate=[16000, 16000])
+        if self.global_train_steps % 200 == 0:
+            # log imgA - fakeB
+            # log imgB - fakeA
+            self.logger.log_image("Mag-realA_fakeB", [self.draw_mag(imgA), self.draw_mag(fakeB),])
+            self.logger.log_image("Mag-realB_fakeA", [self.draw_mag(imgB), self.draw_mag(fakeA),])
+
+            self.logger.log_audio("Audio-realA_fakeB", [self.audio(imgA), self.audio(fakeB),], sample_rate=[16000, 16000])
+            self.logger.log_audio("Audio-realB-fakeA", [self.audio(imgB), self.audio(fakeA),], sample_rate=[16000, 16000])
         
         return self.genLoss
     
